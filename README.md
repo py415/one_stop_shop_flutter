@@ -20,8 +20,8 @@ One Stop Shop is an e-commerce shopping app like Amazon or eBay that sells a wid
 - [ ] User shall be able to filter different items by category.
 - [ ] User shall be able to add item to their cart.
 - [ ] User shall be able to remove item to their cart.
-- [ ] User shall be able to favorite or bookmark an item for future reference.
-- [ ] User shall be able to unfavorite or unbookmark an item for future reference.
+- [x] User shall be able to favorite or bookmark an item for future reference.
+- [x] User shall be able to unfavorite or unbookmark an item for future reference.
 - [ ] User shall be able to checkout items from their cart.
 - [ ] User shall be able to check their orders.
 
@@ -37,6 +37,7 @@ Here's a GIF of how the app works:
 
 - [cupertino_icons](https://github.com/flutter/cupertino_icons) - This is an asset repo containing the default set of icon assets used by Flutter's [Cupertino widgets](https://github.com/flutter/flutter/tree/master/packages/flutter/lib/src/cupertino).
 - [pedantic](https://github.com/dart-lang/pedantic) - Most of the recommended lints directly implement the guidelines set out in [Effective Dart](https://dart.dev/guides/language/effective-dart).
+- [provider](https://github.com/rrousselGit/provider) - A wrapper around InheritedWidget to make them easier to use and more reusable.
 
 ## Credits
 
