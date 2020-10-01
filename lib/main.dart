@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:one_stop_shop_flutter/views/screens/orders_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'models/cart.dart';
+import 'models/cart_provider.dart';
 import 'models/products_provider.dart';
+import 'models/orders_provider.dart';
 import 'views/screens/products_overview_screen.dart';
 import 'views/screens/product_detail_screen.dart';
 import 'views/screens/cart_screen.dart';
@@ -18,8 +20,11 @@ class MyApp extends StatelessWidget {
           create: (ctx) => ProductsProvider(),
         ),
         ChangeNotifierProvider(
-          create: (ctx) => Cart(),
+          create: (ctx) => CartProvider(),
         ),
+        ChangeNotifierProvider(
+          create: (ctx) => OrdersProvider(),
+        )
       ],
       child: MaterialApp(
         title: 'One Stop Shop',
@@ -32,6 +37,7 @@ class MyApp extends StatelessWidget {
         routes: {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
+          OrdersScreen.routeName: (ctx) => OrdersScreen(),
         },
       ),
     );

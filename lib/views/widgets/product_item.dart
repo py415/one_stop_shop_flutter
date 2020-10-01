@@ -3,13 +3,13 @@ import 'package:provider/provider.dart';
 
 import '../screens/product_detail_screen.dart';
 import '../../models/product.dart';
-import '../../models/cart.dart';
+import '../../models/cart_provider.dart';
 
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
-    final cart = Provider.of<Cart>(context, listen: false);
+    final cart = Provider.of<CartProvider>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
