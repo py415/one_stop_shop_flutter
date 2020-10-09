@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/cart_provider.dart';
 
+// Blueprint for cart item.
 class CartItem extends StatelessWidget {
   final String id;
   final String productId;
@@ -37,7 +38,36 @@ class CartItem extends StatelessWidget {
         ),
       ),
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        // Return a pop up dialog that asks the user to confirm their action (i.e. Whether they'd liked to remove item from cart).
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('Are you sure?'),
+            content: Text(
+              ' Do you want to remove this item from the cart?',
+            ),
+            actions: [
+              FlatButton(
+                child: Text('No'),
+                onPressed: () {
+                  // Do NOT remove item from cart when user presses "No".
+                  Navigator.of(ctx).pop(false);
+                },
+              ),
+              FlatButton(
+                child: Text('Yes'),
+                onPressed: () {
+                  // Remove item from cart when user presses "Yes".
+                  Navigator.of(ctx).pop(true);
+                },
+              ),
+            ],
+          ),
+        );
+      },
       onDismissed: (direction) {
+        // Remove item from cart when user slides from the right end and tap the delete icon.
         Provider.of<CartProvider>(context, listen: false).removeItem(productId);
       },
       child: Card(

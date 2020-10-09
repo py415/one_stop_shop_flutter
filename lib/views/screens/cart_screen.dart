@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/cart_provider.dart' show CartProvider;
-import '../../models/orders_provider.dart';
 import '../widgets/cart_item.dart';
+import '../../models/orders_provider.dart';
+import '../../models/cart_provider.dart' show CartProvider;
 
+// Blueprint for cart screen.
 class CartScreen extends StatelessWidget {
+  // Route name to screen.
   static const String routeName = '/cart';
 
   @override
   Widget build(BuildContext context) {
+    // Listener of Cart object.
     final cart = Provider.of<CartProvider>(context);
 
     return Scaffold(
@@ -43,9 +46,12 @@ class CartScreen extends StatelessWidget {
                   FlatButton(
                     child: Text('ORDER NOW'),
                     onPressed: () {
+                      // Complete cart checkout when user presses "ORDER NOW."
+                      // Create a new instance of Order object with the list of items in the cart during checkout.
                       Provider.of<OrdersProvider>(context, listen: false)
                           .addOrder(
                               cart.items.values.toList(), cart.totalAmount);
+                      // Clear cart after completion of checkout.
                       cart.clear();
                     },
                     textColor: Theme.of(context).primaryColor,

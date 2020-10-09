@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// Blueprint for Badget widget.
 class Badge extends StatelessWidget {
   const Badge({
     Key key,

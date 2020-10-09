@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'product.dart';
 
+// Blueprint for products list widget.
 class ProductsProvider with ChangeNotifier {
+  // List of items.
   final List<Product> _items = [
     Product(
       id: 'p1',
@@ -38,15 +40,20 @@ class ProductsProvider with ChangeNotifier {
     ),
   ];
 
+  // Get list of items.
   List<Product> get items => [..._items];
 
+  // Get list of items marked as favorite.
   List<Product> get favoriteItems =>
       _items.where((prodItem) => prodItem.isFavorite).toList();
 
+  // Find item listing by the product id.
   Product findById(String id) {
     return _items.firstWhere((prod) => prod.id == id);
   }
 
+  // Add new product into the list of items.
+  // Then notify all listeners that a new item has been added.
   void addProduct() {
     notifyListeners();
   }

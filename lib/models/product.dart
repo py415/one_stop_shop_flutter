@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+// Blueprint for product.
 class Product with ChangeNotifier {
   final String id;
   final String title;
@@ -17,6 +18,8 @@ class Product with ChangeNotifier {
     this.isFavorite = false,
   });
 
+  // Toggle status of favorite for product.
+  // Then notify all listeners that item has been updated.
   void toggleFavoriteStatus() {
     isFavorite = !isFavorite;
     notifyListeners();

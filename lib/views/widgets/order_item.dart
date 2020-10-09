@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../../models/orders_provider.dart' as ord;
 
+// Blueprint for order item.
 class OrderItem extends StatefulWidget {
   final ord.OrderItem order;
 
@@ -15,6 +16,7 @@ class OrderItem extends StatefulWidget {
 }
 
 class _OrderItemState extends State<OrderItem> {
+  // Toggle for if order item is expanded to show more order details.
   var _expanded = false;
 
   @override
@@ -31,6 +33,7 @@ class _OrderItemState extends State<OrderItem> {
             trailing: IconButton(
               icon: Icon(_expanded ? Icons.expand_less : Icons.expand_more),
               onPressed: () {
+                // Toggle order expansion when user taps the expand icon.
                 setState(() {
                   _expanded = !_expanded;
                 });

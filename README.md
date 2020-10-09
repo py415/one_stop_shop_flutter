@@ -25,6 +25,7 @@ One Stop Shop is an e-commerce shopping app like Amazon or eBay that sells a wid
 - [x] User shall be able to filter list of items by favorite.
 - [x] User shall be able to checkout items from their cart.
 - [x] User shall be able to check their orders.
+- [x] User shall be able to see info popups during user interaction with buttons.
 
 ## App Walkthrough
 
