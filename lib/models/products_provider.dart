@@ -54,7 +54,19 @@ class ProductsProvider with ChangeNotifier {
 
   // Add new product into the list of items.
   // Then notify all listeners that a new item has been added.
-  void addProduct() {
+  void addProduct(Product product) {
+    final newProduct = Product(
+      id: DateTime.now().toString(),
+      title: product.title,
+      description: product.description,
+      price: product.price,
+      imageUrl: product.imageUrl,
+      isFavorite: product.isFavorite,
+    );
+
+    // Add new product to the front of the items list.
+    _items.insert(0, newProduct);
+
     notifyListeners();
   }
 }

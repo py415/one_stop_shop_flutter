@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:one_stop_shop_flutter/views/screens/orders_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'models/cart_provider.dart';
@@ -8,6 +7,9 @@ import 'models/orders_provider.dart';
 import 'views/screens/products_overview_screen.dart';
 import 'views/screens/product_detail_screen.dart';
 import 'views/screens/cart_screen.dart';
+import 'views/screens/edit_product_screen.dart';
+import 'views/screens/orders_screen.dart';
+import 'views/screens/user_products_screen.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,6 +40,8 @@ class MyApp extends StatelessWidget {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
           CartScreen.routeName: (ctx) => CartScreen(),
           OrdersScreen.routeName: (ctx) => OrdersScreen(),
+          UserProductsScreen.routeName: (ctx) => UserProductsScreen(),
+          EditProductScreen.routeName: (ctx) => EditProductScreen(),
         },
       ),
     );
