@@ -30,8 +30,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
     description: '',
     imageUrl: '',
   );
+  // Used to check if screen states are the initial values (i.e. empty text fields).
+  var _isInit = true;
+  // Used to check for default or initial text fields (i.e. empty text fields).
+  var _initValues = {
+    'title': '',
+    'description': '',
+    'price': '',
+    'imageUrl': '',
+  };
   // Regular expression to check for URL validation.
-  var urlPattern =
+  final _urlPattern =
       r'(https?|ftp)://([-A-Z0-9.]+)(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:‌​,.;]*)?';
 
   @override
@@ -40,6 +49,33 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
     // Run updateImageUrl method whenever focus changes.
     _imageUrlFocusNode.addListener(_updateImageUrl);
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_isInit) {
+      final productId = ModalRoute.of(context).settings.arguments as String;
+
+      if (productId != null) {
+        // Fetch user product that is being edited.
+        _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
+            .findById(productId);
+        // Add product listing states to form.
+        _initValues = {
+          'title': _editedProduct.title,
+          'description': _editedProduct.description,
+          'price': _editedProduct.price.toString(),
+          'imageUrl': '',
+        };
+
+        _imageUrlController.text = _editedProduct.imageUrl;
+      }
+    }
+
+    // Text fields are no longer empty.
+    _isInit = false;
   }
 
   @override
@@ -84,9 +120,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
     // Save user input from edit product screen.
     _form.currentState.save();
 
-    // Add product to existing list of items.
-    Provider.of<ProductsProvider>(context, listen: false)
-        .addProduct(_editedProduct);
+    // Check if we are editing product or adding new one.
+    if (_editedProduct.id != null) {
+      // Add product to existing list of items.
+      Provider.of<ProductsProvider>(context, listen: false)
+          .updateProduct(_editedProduct.id, _editedProduct);
+    } else {
+      // Add product to existing list of items.
+      Provider.of<ProductsProvider>(context, listen: false)
+          .addProduct(_editedProduct);
+    }
+
     // Navigate back to previous page after adding new item.
     Navigator.of(context).pop();
   }
@@ -110,6 +154,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
           child: ListView(
             children: [
               TextFormField(
+                initialValue: _initValues['title'],
                 decoration: InputDecoration(labelText: 'Title'),
                 textInputAction: TextInputAction.next,
                 onFieldSubmitted: (_) {
@@ -127,15 +172,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 onSaved: (value) {
                   // Update title value in default Product variable.
                   _editedProduct = Product(
-                    id: null,
+                    id: _editedProduct.id,
                     title: value,
                     price: _editedProduct.price,
                     description: _editedProduct.description,
                     imageUrl: _editedProduct.imageUrl,
+                    isFavorite: _editedProduct.isFavorite,
                   );
                 },
               ),
               TextFormField(
+                initialValue: _initValues['price'],
                 decoration: InputDecoration(labelText: 'Price'),
                 textInputAction: TextInputAction.next,
                 keyboardType: TextInputType.datetime,
@@ -165,15 +212,17 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 onSaved: (value) {
                   // Update price value in default Product variable.
                   _editedProduct = Product(
-                    id: null,
+                    id: _editedProduct.id,
                     title: _editedProduct.title,
                     price: double.parse(value),
                     description: _editedProduct.description,
                     imageUrl: _editedProduct.imageUrl,
+                    isFavorite: _editedProduct.isFavorite,
                   );
                 },
               ),
               TextFormField(
+                initialValue: _initValues['description'],
                 decoration: InputDecoration(labelText: 'Description'),
                 maxLines: 3,
                 textInputAction: TextInputAction.next,
@@ -195,11 +244,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 onSaved: (value) {
                   // Update description value in default Product variable.
                   _editedProduct = Product(
-                    id: null,
+                    id: _editedProduct.id,
                     title: _editedProduct.title,
                     price: _editedProduct.price,
                     description: value,
                     imageUrl: _editedProduct.imageUrl,
+                    isFavorite: _editedProduct.isFavorite,
                   );
                 },
               ),
@@ -237,33 +287,22 @@ class _EditProductScreenState extends State<EditProductScreen> {
                         }
 
                         // Checks if user has entered a valid URL using regular expressions.
-                        if (!RegExp(urlPattern, caseSensitive: false)
+                        if (!RegExp(_urlPattern, caseSensitive: false)
                             .hasMatch(value)) {
                           return 'Please enter a valid URL.';
                         }
-
-                        // // Check to see if user entered a valid url.
-                        // if (!value.startsWith('http') ||
-                        //     !value.startsWith('https')) {
-                        //   return 'Please enter a valid URL';
-                        // }
-
-                        // // Check to see if user entered a URL with the correct format file.
-                        // if (!value.endsWith('.jpg') ||
-                        //     !value.endsWith('.png')) {
-                        //   return 'Please enter a valid URL with the proper file type.';
-                        // }
 
                         return null;
                       },
                       onSaved: (value) {
                         // Update imageUrl value in default Product variable.
                         _editedProduct = Product(
-                          id: null,
+                          id: _editedProduct.id,
                           title: _editedProduct.title,
                           price: _editedProduct.price,
                           description: _editedProduct.description,
                           imageUrl: value,
+                          isFavorite: _editedProduct.isFavorite,
                         );
                       },
                       onEditingComplete: () {

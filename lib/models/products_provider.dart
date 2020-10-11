@@ -69,4 +69,19 @@ class ProductsProvider with ChangeNotifier {
 
     notifyListeners();
   }
+
+  // Edit existing product listing.
+  void updateProduct(String id, Product newProduct) {
+    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+
+    // Check if product for id currently exist.
+    if (prodIndex >= 0) {
+      // Product exists, so update state for existing product.
+      _items[prodIndex] = newProduct;
+      notifyListeners();
+    } else {
+      // Product for id doesn't exist in product listing.
+      print('Error. Product for id does not exist.');
+    }
+  }
 }

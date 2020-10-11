@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:one_stop_shop_flutter/views/screens/edit_product_screen.dart';
 import 'package:provider/provider.dart';
 
+import 'edit_product_screen.dart';
 import '../../models/products_provider.dart';
 import '../../views/widgets/app_drawer.dart';
 import '../../views/widgets/user_product_item.dart';
@@ -36,6 +36,7 @@ class UserProductsScreen extends StatelessWidget {
           itemBuilder: (_, i) => Column(
             children: [
               UserProductItem(
+                id: productsData.items[i].id,
                 title: productsData.items[i].title,
                 imageUrl: productsData.items[i].imageUrl,
               ),
