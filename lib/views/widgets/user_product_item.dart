@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../models/products_provider.dart';
 import '../screens/edit_product_screen.dart';
 
 // Blueprint for user product item widget.
@@ -10,8 +12,10 @@ class UserProductItem extends StatelessWidget {
   final String title;
   // Image URL of user listed item.
   final String imageUrl;
+  // Method to handle product item deletion.
+  final Function deleteHandler;
 
-  UserProductItem({this.id, this.title, this.imageUrl});
+  UserProductItem({this.id, this.title, this.imageUrl, this.deleteHandler});
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +41,8 @@ class UserProductItem extends StatelessWidget {
               icon: Icon(Icons.delete),
               onPressed: () {
                 // Delete user product listings when user presses the delete icon.
+                Provider.of<ProductsProvider>(context, listen: false)
+                    .deleteProduct(id);
               },
               color: Theme.of(context).errorColor,
             ),

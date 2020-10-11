@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'edit_product_screen.dart';
 import '../../models/products_provider.dart';
 import '../../views/widgets/app_drawer.dart';
 import '../../views/widgets/user_product_item.dart';
+import 'edit_product_screen.dart';
 
 // Blueprint for user products screen.
 class UserProductsScreen extends StatelessWidget {

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/cart_item.dart';
-import '../../models/orders_provider.dart';
 import '../../models/cart_provider.dart' show CartProvider;
+import '../../models/orders_provider.dart';
+import '../widgets/cart_item.dart';
 
 // Blueprint for cart screen.
 class CartScreen extends StatelessWidget {

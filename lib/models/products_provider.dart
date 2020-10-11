@@ -71,6 +71,7 @@ class ProductsProvider with ChangeNotifier {
   }
 
   // Edit existing product listing.
+  // Then notify all listeners that a new item has been added.
   void updateProduct(String id, Product newProduct) {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
 
@@ -83,5 +84,12 @@ class ProductsProvider with ChangeNotifier {
       // Product for id doesn't exist in product listing.
       print('Error. Product for id does not exist.');
     }
+  }
+
+  // Delete existing product listing.
+  // Then notify all listeners that a new item has been added.
+  void deleteProduct(String id) {
+    _items.removeWhere((prod) => prod.id == id);
+    notifyListeners();
   }
 }
