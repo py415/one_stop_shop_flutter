@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/cart_provider.dart';
+import '../models/cart_provider.dart';
 
 // Blueprint for cart item.
 class CartItem extends StatelessWidget {

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../models/orders_provider.dart' as ord;
+import '../models/orders_provider.dart' as ord;
 
 // Blueprint for order item.
 class OrderItem extends StatefulWidget {

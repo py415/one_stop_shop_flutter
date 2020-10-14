@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'product.dart';
 
@@ -54,20 +57,46 @@ class ProductsProvider with ChangeNotifier {
 
   // Add new product into the list of items.
   // Then notify all listeners that a new item has been added.
-  void addProduct(Product product) {
-    final newProduct = Product(
-      id: DateTime.now().toString(),
-      title: product.title,
-      description: product.description,
-      price: product.price,
-      imageUrl: product.imageUrl,
-      isFavorite: product.isFavorite,
-    );
+  Future<void> addProduct(Product product) {
+    // TODO: REMOVE HTTP ENDPOINT URL BEFORE COMMITING TO GITHUB!
+    // Http endpoint url for backend database.
+    const url = 'ADD_BACKEND_URL_HERE';
 
-    // Add new product to the front of the items list.
-    _items.insert(0, newProduct);
+    // Store new product to backend database.
+    return http
+        .post(
+      url,
+      body: json.encode(
+        {
+          'title': product.title,
+          'description': product.description,
+          'price': product.price,
+          'imageUrl': product.imageUrl,
+          'isFavorite': product.isFavorite,
+        },
+      ),
+    )
+        .then(
+      (response) {
+        // After new product is stored on backend database, then add new product to list of items.
+        final newProduct = Product(
+          id: json.decode(response.body)['name'],
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          imageUrl: product.imageUrl,
+          isFavorite: product.isFavorite,
+        );
 
-    notifyListeners();
+        // Add new product to the front of the items list.
+        _items.insert(0, newProduct);
+
+        notifyListeners();
+      },
+    ).catchError((error) {
+      print(error);
+      throw error;
+    });
   }
 
   // Edit existing product listing.

@@ -45,6 +45,7 @@ Here's a GIF of how the app works:
 - [pedantic](https://github.com/dart-lang/pedantic) - Most of the recommended lints directly implement the guidelines set out in [Effective Dart](https://dart.dev/guides/language/effective-dart).
 - [provider](https://github.com/rrousselGit/provider) - A wrapper around InheritedWidget to make them easier to use and more reusable.
 - [intl](https://github.com/dart-lang/intl) - A package that provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
+- [http](https://github.com/dart-lang/http) - A composable, Future-based library for making HTTP requests.
 
 ## Credits
 

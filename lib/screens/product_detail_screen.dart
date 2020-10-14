@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/products_provider.dart';
+import '../models/products_provider.dart';
 
 // Blueprint for product details screen.
 class ProductDetailScreen extends StatelessWidget {

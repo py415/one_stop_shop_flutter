@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../screens/orders_screen.dart';
 import '../screens/products_overview_screen.dart';
-import '../../views/screens/user_products_screen.dart';
+import '../screens/user_products_screen.dart';
 
 // Blueprint for AppDrawer widget.
 class AppDrawer extends StatelessWidget {
