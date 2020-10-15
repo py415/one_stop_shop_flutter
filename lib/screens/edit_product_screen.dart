@@ -111,7 +111,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
   }
 
   // Save data from form.
-  void _saveForm() {
+  Future<void> _saveForm() async {
     final isValid = _form.currentState.validate();
 
     // Check if form fields had valid responses.
@@ -139,11 +139,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
       // Navigate back to previous page after updating existing item.
       Navigator.of(context).pop();
     } else {
-      // Add new product to list of items.
-      Provider.of<ProductsProvider>(context, listen: false)
-          .addProduct(_editedProduct)
-          .catchError((error) {
-        return showDialog<Null>(
+      try {
+        // Add new product to list of items.
+        await Provider.of<ProductsProvider>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        // Show dialog pop up when something goes wrong.
+        await showDialog<Null>(
           context: context,
           builder: (ctx) => AlertDialog(
             title: Text('An error occurred!'),
@@ -157,14 +159,14 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      }).then((_) {
+      } finally {
         // Toggle loading HUD off.
         setState(() {
           _isLoading = false;
         });
         // Navigate back to previous page after adding new item.
         Navigator.of(context).pop();
-      });
+      }
     }
   }
 
