@@ -11,6 +11,12 @@ class UserProductsScreen extends StatelessWidget {
   // Route name to screen.
   static const String routeName = '/user-products”';
 
+  // Refetch products from backend database to see if there are any new products available since last refresh.
+  Future<void> _refreshProducts(BuildContext context) async {
+    await Provider.of<ProductsProvider>(context, listen: false)
+        .fetchAndSetProducts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final productsData = Provider.of<ProductsProvider>(context);
@@ -29,19 +35,22 @@ class UserProductsScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: Padding(
-        padding: EdgeInsets.all(8),
-        child: ListView.builder(
-          itemCount: productsData.items.length,
-          itemBuilder: (_, i) => Column(
-            children: [
-              UserProductItem(
-                id: productsData.items[i].id,
-                title: productsData.items[i].title,
-                imageUrl: productsData.items[i].imageUrl,
-              ),
-              Divider(),
-            ],
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: Padding(
+          padding: EdgeInsets.all(8),
+          child: ListView.builder(
+            itemCount: productsData.items.length,
+            itemBuilder: (_, i) => Column(
+              children: [
+                UserProductItem(
+                  id: productsData.items[i].id,
+                  title: productsData.items[i].title,
+                  imageUrl: productsData.items[i].imageUrl,
+                ),
+                Divider(),
+              ],
+            ),
           ),
         ),
       ),

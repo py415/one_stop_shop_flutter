@@ -129,15 +129,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
     // Check if we are editing product or adding new one.
     if (_editedProduct.id != null) {
-      // Update existing product details.
-      Provider.of<ProductsProvider>(context, listen: false)
-          .updateProduct(_editedProduct.id, _editedProduct);
-      // Toggle loading HUD off.
-      setState(() {
-        _isLoading = false;
-      });
-      // Navigate back to previous page after updating existing item.
-      Navigator.of(context).pop();
+      try {
+        // Update existing product details.
+        await Provider.of<ProductsProvider>(context, listen: false)
+            .updateProduct(_editedProduct.id, _editedProduct);
+      } catch (error) {
+        // Show dialog pop up when something goes wrong.
+        await showDialog<Null>(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('An error occurred!'),
+            content: Text('Something went wrong.'),
+            actions: [
+              FlatButton(
+                  child: Text('Okay'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+            ],
+          ),
+        );
+      }
     } else {
       try {
         // Add new product to list of items.
@@ -159,15 +171,16 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      } finally {
-        // Toggle loading HUD off.
-        setState(() {
-          _isLoading = false;
-        });
-        // Navigate back to previous page after adding new item.
-        Navigator.of(context).pop();
       }
     }
+
+    // Toggle loading HUD off.
+    setState(() {
+      _isLoading = false;
+    });
+
+    // Navigate back to previous page after adding new item.
+    Navigator.of(context).pop();
   }
 
   @override

@@ -36,7 +36,7 @@ class AppDrawer extends StatelessWidget {
         Divider(),
         ListTile(
           leading: Icon(Icons.edit),
-          title: Text('Products'),
+          title: Text('Manage Products'),
           onTap: () {
             // Segue into user products listing screen when user presses edit icon.
             Navigator.of(context)

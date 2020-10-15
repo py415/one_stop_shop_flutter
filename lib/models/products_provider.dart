@@ -2,14 +2,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:one_stop_shop_flutter/models/http_exception.dart';
 
 import 'product.dart';
 
 // Blueprint for products list widget.
 class ProductsProvider with ChangeNotifier {
+  // ignore: todo
   // TODO: REMOVE HTTP ENDPOINT URL BEFORE COMMITING TO GITHUB!
   // Http endpoint url for backend database.
-  final url = 'ADD_BACKEND_URL_HERE';
+  final productsUrl = 'ADD_BACKEND_URL_HERE';
   // List of items.
   List<Product> _items = [];
 
@@ -29,7 +31,7 @@ class ProductsProvider with ChangeNotifier {
   // Then notify all listeners that products have been fetched.
   Future<void> fetchAndSetProducts() async {
     try {
-      final response = await http.get(url);
+      final response = await http.get(productsUrl);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final loadedProducts = <Product>[];
 
@@ -58,7 +60,7 @@ class ProductsProvider with ChangeNotifier {
     try {
       // Store new product to backend database.
       final response = await http.post(
-        url,
+        productsUrl,
         body: json.encode(
           {
             'title': product.title,
@@ -92,11 +94,29 @@ class ProductsProvider with ChangeNotifier {
 
   // Edit existing product listing.
   // Then notify all listeners that a new item has been added.
-  void updateProduct(String id, Product newProduct) {
+  void updateProduct(String id, Product newProduct) async {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
 
     // Check if product for id currently exist.
     if (prodIndex >= 0) {
+      // ignore: todo
+      // TODO: REMOVE HTTP ENDPOINT URL BEFORE COMMITING TO GITHUB!
+      // Http endpoint url for backend database.
+      final url = 'ADD_BACKEND_URL_HERE';
+
+      // Update item for product with id.
+      await http.patch(
+        url,
+        body: json.encode(
+          {
+            'title': newProduct.title,
+            'description': newProduct.description,
+            'price': newProduct.price,
+            'imageUrl': newProduct.imageUrl,
+          },
+        ),
+      );
+
       // Product exists, so update state for existing product.
       _items[prodIndex] = newProduct;
       notifyListeners();
@@ -108,8 +128,30 @@ class ProductsProvider with ChangeNotifier {
 
   // Delete existing product listing.
   // Then notify all listeners that a new item has been added.
-  void deleteProduct(String id) {
-    _items.removeWhere((prod) => prod.id == id);
+  Future<void> deleteProduct(String id) async {
+    // ignore: todo
+    // TODO: REMOVE HTTP ENDPOINT URL BEFORE COMMITING TO GITHUB!
+    // Http endpoint url for backend database.
+    final url = 'ADD_BACKEND_URL_HERE';
+    // Index for product selected with id.
+    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+    // Product for selected item.
+    var existingProduct = _items[existingProductIndex];
+    // Delete product from backend database.
+    final response = await http.delete(url);
+
+    // Remove product from items list.
+    _items.removeAt(existingProductIndex);
     notifyListeners();
+
+    if (response.statusCode >= 400) {
+      // Reinsert product to list in case deleting fails.
+      _items.insert(existingProductIndex, existingProduct);
+      notifyListeners();
+      throw HttpException('Error. Could not delete product.');
+    }
+
+    // Set to null if successfully deleted product from backend database.
+    existingProduct = null;
   }
 }
