@@ -43,19 +43,7 @@ class CartScreen extends StatelessWidget {
                     ),
                     backgroundColor: Theme.of(context).primaryColor,
                   ),
-                  FlatButton(
-                    child: Text('ORDER NOW'),
-                    onPressed: () {
-                      // Complete cart checkout when user presses "ORDER NOW."
-                      // Create a new instance of Order object with the list of items in the cart during checkout.
-                      Provider.of<OrdersProvider>(context, listen: false)
-                          .addOrder(
-                              cart.items.values.toList(), cart.totalAmount);
-                      // Clear cart after completion of checkout.
-                      cart.clear();
-                    },
-                    textColor: Theme.of(context).primaryColor,
-                  ),
+                  OrderButton(cart: cart),
                 ],
               ),
             ),
@@ -75,6 +63,49 @@ class CartScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  const OrderButton({
+    Key key,
+    @required this.cart,
+  }) : super(key: key);
+
+  final CartProvider cart;
+
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      child: _isLoading ? CircularProgressIndicator() : Text('ORDER NOW'),
+      onPressed: (widget.cart.totalAmount <= 0 || _isLoading)
+          ? null
+          : () async {
+              setState(() {
+                _isLoading = true;
+              });
+
+              // Complete cart checkout when user presses "ORDER NOW."
+              // Create a new instance of Order object with the list of items in the cart during checkout.
+              await Provider.of<OrdersProvider>(context, listen: false)
+                  .addOrder(widget.cart.items.values.toList(),
+                      widget.cart.totalAmount);
+              // Clear cart after completion of checkout.
+              widget.cart.clear();
+
+              setState(() {
+                _isLoading = false;
+              });
+            },
+      textColor: Theme.of(context).primaryColor,
     );
   }
 }

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'cart_screen.dart';
 import '../models/cart_provider.dart';
 import '../models/products_provider.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/badge.dart';
 import '../widgets/products_grid.dart';
-import 'cart_screen.dart';
 
 enum FilterOptions {
   Favorites,
@@ -25,33 +25,19 @@ class ProductsOverviewScreen extends StatefulWidget {
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   // Used to toggle products list in overview screen based on which items were favorited.
   var _showOnlyFavorites = false;
-  // Check if product data is fetched from backend database.
-  var _isInit = true;
-  // Toggle loading HUD when fetching data.
-  var _isLoading = false;
+  Future _productsFuture;
+
+  Future runFuture() async {
+    return await Provider.of<ProductsProvider>(context, listen: false)
+        .fetchAndSetProducts();
+  }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
 
-    // Fetch products from backend database.
-    if (_isInit) {
-      // Toggle on loading HUD when fetching data.
-      setState(() {
-        _isLoading = true;
-      });
-
-      // Fetch products from backend database.
-      Provider.of<ProductsProvider>(context).fetchAndSetProducts().then((_) {
-        // Toggle off loading after fetching data finishes.
-        setState(() {
-          _isLoading = false;
-        });
-      });
-    }
-
-    // Change value to false once data is fetched.
-    _isInit = false;
+    // Fetch products data.
+    _productsFuture = runFuture();
   }
 
   @override
@@ -101,11 +87,29 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         ],
       ),
       drawer: AppDrawer(),
-      body: _isLoading
-          ? Center(
+      body: FutureBuilder(
+        future: _productsFuture,
+        builder: (_, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
               child: CircularProgressIndicator(),
-            )
-          : ProductsGrid(showFavorites: _showOnlyFavorites),
+            );
+          } else {
+            if (snapshot.error != null) {
+              // ...
+              // Handle data snapshot error
+              return Center(
+                child: Text('An error occurred!'),
+              );
+            } else {
+              return Consumer<ProductsProvider>(
+                builder: (ctx, productData, child) =>
+                    ProductsGrid(showFavorites: _showOnlyFavorites),
+              );
+            }
+          }
+        },
+      ),
     );
   }
 }
