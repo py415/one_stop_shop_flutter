@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/cart_provider.dart';
+import '../providers/cart.dart';
 
 // Blueprint for cart item.
 class CartItem extends StatelessWidget {
@@ -68,7 +68,7 @@ class CartItem extends StatelessWidget {
       },
       onDismissed: (direction) {
         // Remove item from cart when user slides from the right end and tap the delete icon.
-        Provider.of<CartProvider>(context, listen: false).removeItem(productId);
+        Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
       child: Card(
         margin: EdgeInsets.symmetric(

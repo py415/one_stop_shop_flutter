@@ -3,14 +3,19 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'http_exception.dart';
+import '../models/http_exception.dart';
 import '../constants.dart';
 import 'product.dart';
 
 // Blueprint for products list widget.
-class ProductsProvider with ChangeNotifier {
+class Products with ChangeNotifier {
   // List of items.
   List<Product> _items = [];
+  // Token used for user authentication.
+  final String authToken;
+  final String userId;
+
+  Products(this.authToken, this.userId, this._items);
 
   // Get list of items.
   List<Product> get items => [..._items];
@@ -26,9 +31,12 @@ class ProductsProvider with ChangeNotifier {
 
   // Fetch products from backend database.
   // Then notify all listeners that products have been fetched.
-  Future<void> fetchAndSetProducts() async {
+  Future<void> fetchAndSetProducts([bool filterByUser = false]) async {
     try {
-      final response = await http.get(Constants.productsUrl);
+      final response = await http.get(
+        productFilterByUserUrl(
+            token: authToken, userId: userId, filterByUser: filterByUser),
+      );
       final loadedProducts = <Product>[];
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
 
@@ -37,6 +45,11 @@ class ProductsProvider with ChangeNotifier {
         return;
       }
 
+      final favoriteResponse = await http.get(
+        userFavoritesUrl(token: authToken, userId: userId),
+      );
+      final favoriteData = json.decode(favoriteResponse.body);
+
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
           id: prodId,
@@ -44,7 +57,8 @@ class ProductsProvider with ChangeNotifier {
           description: prodData['description'],
           price: prodData['price'],
           imageUrl: prodData['imageUrl'],
-          isFavorite: prodData['isFavorite'],
+          isFavorite:
+              favoriteData == null ? false : favoriteData[prodId] ?? false,
         ));
       });
 
@@ -52,7 +66,6 @@ class ProductsProvider with ChangeNotifier {
       notifyListeners();
     } catch (error) {
       print(error);
-      rethrow;
     }
   }
 
@@ -62,14 +75,14 @@ class ProductsProvider with ChangeNotifier {
     try {
       // Store new product to backend database.
       final response = await http.post(
-        Constants.productsUrl,
+        allProductsUrl(token: authToken),
         body: json.encode(
           {
             'title': product.title,
             'description': product.description,
             'price': product.price,
             'imageUrl': product.imageUrl,
-            'isFavorite': product.isFavorite,
+            'creatorId': userId,
           },
         ),
       );
@@ -96,16 +109,14 @@ class ProductsProvider with ChangeNotifier {
 
   // Edit existing product listing.
   // Then notify all listeners that a new item has been added.
-  Future<void> updateProduct(String id, Product newProduct) async {
-    final prodIndex = _items.indexWhere((prod) => prod.id == id);
+  Future<void> updateProduct(String productId, Product newProduct) async {
+    final prodIndex = _items.indexWhere((prod) => prod.id == productId);
 
     // Check if product for id currently exist.
     if (prodIndex >= 0) {
-      final url = Constants.fetchProduct(id);
-
       // Update item for product with id.
       await http.patch(
-        url,
+        productWithIdUrl(token: authToken, productId: productId),
         body: json.encode(
           {
             'title': newProduct.title,
@@ -127,14 +138,16 @@ class ProductsProvider with ChangeNotifier {
 
   // Delete existing product listing.
   // Then notify all listeners that a new item has been added.
-  Future<void> deleteProduct(String id) async {
-    final url = Constants.fetchProduct(id);
+  Future<void> deleteProduct(String productId) async {
     // Index for product selected with id.
-    final existingProductIndex = _items.indexWhere((prod) => prod.id == id);
+    final existingProductIndex =
+        _items.indexWhere((prod) => prod.id == productId);
     // Product for selected item.
     var existingProduct = _items[existingProductIndex];
     // Delete product from backend database.
-    final response = await http.delete(url);
+    final response = await http.delete(
+      productWithIdUrl(token: authToken, productId: productId),
+    );
 
     // Remove product from items list.
     _items.removeAt(existingProductIndex);

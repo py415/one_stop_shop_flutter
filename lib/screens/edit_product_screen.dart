@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/product.dart';
-import '../models/products_provider.dart';
+import '../providers/product.dart';
+import '../providers/products.dart';
 
 // Blueprint for edit user product screen.
 class EditProductScreen extends StatefulWidget {
@@ -62,8 +62,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
 
       if (productId != null) {
         // Fetch user product that is being edited.
-        _editedProduct = Provider.of<ProductsProvider>(context, listen: false)
-            .findById(productId);
+        _editedProduct =
+            Provider.of<Products>(context, listen: false).findById(productId);
         // Add product listing states to form.
         _initValues = {
           'title': _editedProduct.title,
@@ -131,7 +131,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_editedProduct.id != null) {
       try {
         // Update existing product details.
-        await Provider.of<ProductsProvider>(context, listen: false)
+        await Provider.of<Products>(context, listen: false)
             .updateProduct(_editedProduct.id, _editedProduct);
       } catch (error) {
         // Show dialog pop up when something goes wrong.
@@ -153,7 +153,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     } else {
       try {
         // Add new product to list of items.
-        await Provider.of<ProductsProvider>(context, listen: false)
+        await Provider.of<Products>(context, listen: false)
             .addProduct(_editedProduct);
       } catch (error) {
         // Show dialog pop up when something goes wrong.

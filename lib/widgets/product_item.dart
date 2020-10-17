@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/cart_provider.dart';
-import '../models/product.dart';
+import '../providers/auth.dart';
+import '../providers/cart.dart';
+import '../providers/product.dart';
 import '../screens/product_detail_screen.dart';
 
 // Blueprint for product item widget.
@@ -12,7 +13,8 @@ class ProductItem extends StatelessWidget {
     // Listener of Product object.
     final product = Provider.of<Product>(context, listen: false);
     // Listener of Cart object.
-    final cart = Provider.of<CartProvider>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
+    final authData = Provider.of<Auth>(context, listen: false);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -38,7 +40,10 @@ class ProductItem extends StatelessWidget {
               color: Theme.of(context).accentColor,
               onPressed: () {
                 // Toggle status of favorite of selected item.
-                product.toggleFavoriteStatus();
+                product.toggleFavoriteStatus(
+                  authData.token,
+                  authData.userId,
+                );
               },
             ),
           ),

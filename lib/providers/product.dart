@@ -31,9 +31,8 @@ class Product with ChangeNotifier {
 
   // Toggle status of favorite for product.
   // Then notify all listeners that item has been updated.
-  Future<void> toggleFavoriteStatus() async {
-    final url = Constants.fetchProduct(id);
-    final oldStatus = !isFavorite;
+  Future<void> toggleFavoriteStatus(String token, String userId) async {
+    final oldStatus = isFavorite;
 
     // Toggle item as favorite.
     isFavorite = !isFavorite;
@@ -41,13 +40,13 @@ class Product with ChangeNotifier {
 
     try {
       // Update favorite status on backend database.
-      final response = await http.patch(
-        url,
-        body: json.encode(
-          {
-            'isFavorite': isFavorite,
-          },
+      final response = await http.put(
+        userFavoritesUrl(
+          token: token,
+          userId: userId,
+          productsId: id,
         ),
+        body: json.encode(isFavorite),
       );
 
       if (response.statusCode >= 400) {

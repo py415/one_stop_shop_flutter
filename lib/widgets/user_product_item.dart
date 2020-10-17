@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/products_provider.dart';
+import '../providers/products.dart';
 import '../screens/edit_product_screen.dart';
 
 // Blueprint for user product item widget.
@@ -44,7 +44,7 @@ class UserProductItem extends StatelessWidget {
               onPressed: () async {
                 try {
                   // Delete user product listings when user presses the delete icon.
-                  await Provider.of<ProductsProvider>(context, listen: false)
+                  await Provider.of<Products>(context, listen: false)
                       .deleteProduct(id);
                 } catch (error) {
                   scaffold.showSnackBar(SnackBar(

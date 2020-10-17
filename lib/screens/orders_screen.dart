@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/orders_provider.dart' show OrdersProvider;
+import '../providers/orders.dart' show Orders;
 import '../widgets/app_drawer.dart';
 import '../widgets/order_item.dart';
 
@@ -18,7 +18,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
   Future _ordersFuture;
 
   Future _runFuture() async {
-    return await Provider.of<OrdersProvider>(context, listen: false)
+    return await Provider.of<Orders>(context, listen: false)
         .fetchAndSetOrders();
   }
 
@@ -50,7 +50,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 child: Text('An error occurred!'),
               );
             } else {
-              return Consumer<OrdersProvider>(
+              return Consumer<Orders>(
                 builder: (ctx, orderData, child) => ListView.builder(
                   itemCount: orderData.orders.length,
                   itemBuilder: (ctx, i) => OrderItem(

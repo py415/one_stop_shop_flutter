@@ -10,14 +10,17 @@
 ## Overview
 ### Description
 
-One Stop Shop is an e-commerce shopping app like Amazon or eBay that sells a wide variety of products and services from both manufacturers and indepedent sellers.
+One Stop Shop is an e-commerce shopping app like [Amazon](https://www.amazon.com/) or [eBay](https://www.ebay.com/) that sells a wide variety of products and services from both manufacturers and indepedent sellers.
 
 ## Product Specs
 ### User Stories
 
+- [x] User shall be able register for a new account.
+- [x] User shall be able to login to their existing account.
+- [ ] User shall be able to log out.
+- [ ] User login shall persist across app restarts.
 - [x] User shall be able to view a list of items for sale.
 - [x] User shall be able to click an item in the list to see a detailed description of the item.
-- [ ] User shall be able to filter different items by category.
 - [x] User shall be able to add item to their cart.
 - [x] User shall be able to remove item to their cart.
 - [x] User shall be able to favorite or bookmark an item for future reference.

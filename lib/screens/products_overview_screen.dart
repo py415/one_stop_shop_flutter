@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'cart_screen.dart';
-import '../models/cart_provider.dart';
-import '../models/products_provider.dart';
+import '../providers/cart.dart';
+import '../providers/products.dart';
 import '../widgets/app_drawer.dart';
 import '../widgets/badge.dart';
 import '../widgets/products_grid.dart';
@@ -16,7 +16,7 @@ enum FilterOptions {
 // Blueprint for products overview screen.
 class ProductsOverviewScreen extends StatefulWidget {
   // Route name to screen.
-  static const String routeName = '/';
+  static const String routeName = '/products';
 
   @override
   _ProductsOverviewScreenState createState() => _ProductsOverviewScreenState();
@@ -28,7 +28,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   Future _productsFuture;
 
   Future runFuture() async {
-    return await Provider.of<ProductsProvider>(context, listen: false)
+    return await Provider.of<Products>(context, listen: false)
         .fetchAndSetProducts();
   }
 
@@ -71,7 +71,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
               ),
             ],
           ),
-          Consumer<CartProvider>(
+          Consumer<Cart>(
             builder: (_, cart, ch) => Badge(
               child: ch,
               value: cart.itemCount.toString(),
@@ -102,7 +102,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
                 child: Text('An error occurred!'),
               );
             } else {
-              return Consumer<ProductsProvider>(
+              return Consumer<Products>(
                 builder: (ctx, productData, child) =>
                     ProductsGrid(showFavorites: _showOnlyFavorites),
               );

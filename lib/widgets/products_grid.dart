@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'product_item.dart';
-import '../models/products_provider.dart';
+import '../providers/products.dart';
 
 // Blueprint for product grid.
 class ProductsGrid extends StatelessWidget {
@@ -14,7 +14,7 @@ class ProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Listener for Products.
-    final productsData = Provider.of<ProductsProvider>(context);
+    final productsData = Provider.of<Products>(context);
     // Set filter based on whether user selected to show favorited items only or all.
     final products =
         showFavorites ? productsData.favoriteItems : productsData.items;

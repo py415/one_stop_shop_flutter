@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/products_provider.dart';
+import '../providers/products.dart';
 
 // Blueprint for product details screen.
 class ProductDetailScreen extends StatelessWidget {
@@ -13,7 +13,7 @@ class ProductDetailScreen extends StatelessWidget {
     // Product id of selected item from previous screen (selectd item from overview screen).
     final productId = ModalRoute.of(context).settings.arguments as String;
     // Listener for Products list object.
-    final loadedProduct = Provider.of<ProductsProvider>(
+    final loadedProduct = Provider.of<Products>(
       context,
       listen: false,
     ).findById(productId);

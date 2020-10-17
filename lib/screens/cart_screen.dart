@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/cart_provider.dart' show CartProvider;
-import '../models/orders_provider.dart';
+import '../providers/cart.dart' show Cart;
+import '../providers/orders.dart';
 import '../widgets/cart_item.dart';
 
 // Blueprint for cart screen.
@@ -13,7 +13,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Listener of Cart object.
-    final cart = Provider.of<CartProvider>(context);
+    final cart = Provider.of<Cart>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -73,7 +73,7 @@ class OrderButton extends StatefulWidget {
     @required this.cart,
   }) : super(key: key);
 
-  final CartProvider cart;
+  final Cart cart;
 
   @override
   _OrderButtonState createState() => _OrderButtonState();
@@ -95,9 +95,8 @@ class _OrderButtonState extends State<OrderButton> {
 
               // Complete cart checkout when user presses "ORDER NOW."
               // Create a new instance of Order object with the list of items in the cart during checkout.
-              await Provider.of<OrdersProvider>(context, listen: false)
-                  .addOrder(widget.cart.items.values.toList(),
-                      widget.cart.totalAmount);
+              await Provider.of<Orders>(context, listen: false).addOrder(
+                  widget.cart.items.values.toList(), widget.cart.totalAmount);
               // Clear cart after completion of checkout.
               widget.cart.clear();
 

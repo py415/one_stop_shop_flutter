@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'cart_provider.dart';
 import '../constants.dart';
+import 'cart.dart';
 
 // Blueprint for order checked out from cart.
 class OrderItem {
@@ -21,9 +21,15 @@ class OrderItem {
   });
 }
 
-class OrdersProvider with ChangeNotifier {
+class Orders with ChangeNotifier {
   // List of previously checked out orders.
   List<OrderItem> _orders = [];
+  // Token used for user authentication.
+  final String authToken;
+  // Id for currently logged in users.
+  final String userId;
+
+  Orders(this.authToken, this.userId, this._orders);
 
   // Get the orders in the order history.
   List<OrderItem> get orders => [..._orders];
@@ -32,7 +38,8 @@ class OrdersProvider with ChangeNotifier {
   // Then notify all listeners that orders have been fetched.
   Future<void> fetchAndSetOrders() async {
     try {
-      final response = await http.get(Constants.ordersUrl);
+      final response =
+          await http.get(ordersUrl(token: authToken, userId: userId));
       final loadedOrders = <OrderItem>[];
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
 
@@ -75,7 +82,7 @@ class OrdersProvider with ChangeNotifier {
     try {
       // Store orders from checkout to backend database.
       final response = await http.post(
-        Constants.ordersUrl,
+        ordersUrl(token: authToken, userId: userId),
         body: json.encode({
           'amount': total,
           'dateTime': timestamp.toIso8601String(),
