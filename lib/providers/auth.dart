@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/http_exception.dart';
 import '../constants.dart';
@@ -65,8 +66,20 @@ class Auth with ChangeNotifier {
         ),
       );
 
-      autoLogout();
+      _autoLogout();
       notifyListeners();
+
+      // Save authentication token, user id, and expiry date for auto login.
+      final preferences = await SharedPreferences.getInstance();
+      final userData = json.encode(
+        {
+          'token': _token,
+          'userId': _userId,
+          'expiryDate': _expiryDate.toIso8601String(),
+        },
+      );
+
+      preferences.setString('userData', userData);
     } catch (error) {
       print(error);
       rethrow;
@@ -83,8 +96,35 @@ class Auth with ChangeNotifier {
     return _authenticate(email, password, 'signInWithPassword');
   }
 
+  Future<bool> tryAutoLogin() async {
+    final preferences = await SharedPreferences.getInstance();
+
+    // Check if there is any user data preferences saved before.
+    if (!preferences.containsKey('userData')) {
+      return false;
+    }
+
+    final extractedUserData =
+        json.decode(preferences.getString('userData')) as Map<String, Object>;
+    final expiryDate = DateTime.parse(extractedUserData['expiryDate']);
+
+    // Check if we have already reached token expiry date.
+    if (expiryDate.isBefore(DateTime.now())) {
+      return false;
+    }
+
+    _token = extractedUserData['token'];
+    _userId = extractedUserData['userId'];
+    _expiryDate = expiryDate;
+
+    notifyListeners();
+    _autoLogout();
+
+    return true;
+  }
+
   // Log out currently logged in user.
-  void logout() {
+  Future<void> logout() async {
     _token = null;
     _userId = null;
     _expiryDate = null;
@@ -95,10 +135,13 @@ class Auth with ChangeNotifier {
     }
 
     notifyListeners();
+
+    final preferences = await SharedPreferences.getInstance();
+    preferences.clear();
   }
 
   // Automatically log out user when timer is up.
-  void autoLogout() {
+  void _autoLogout() {
     // Cancel existing timer.
     if (_authTimer != null) {
       _authTimer.cancel();

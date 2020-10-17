@@ -52,6 +52,7 @@ class AppDrawer extends StatelessWidget {
           onTap: () {
             // Close drawer.
             Navigator.of(context).pop();
+            Navigator.of(context).pushReplacementNamed('/');
             // Logout currently logged in user. Segue back into authentication screen.
             Provider.of<Auth>(context, listen: false).logout();
           },

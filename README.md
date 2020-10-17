@@ -17,8 +17,8 @@ One Stop Shop is an e-commerce shopping app like [Amazon](https://www.amazon.com
 
 - [x] User shall be able register for a new account.
 - [x] User shall be able to login to their existing account.
-- [ ] User shall be able to log out.
-- [ ] User login shall persist across app restarts.
+- [x] User shall be able to log out.
+- [x] User login shall persist across app restarts.
 - [x] User shall be able to view a list of items for sale.
 - [x] User shall be able to click an item in the list to see a detailed description of the item.
 - [x] User shall be able to add item to their cart.
