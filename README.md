@@ -33,6 +33,7 @@ One Stop Shop is an e-commerce shopping app like [Amazon](https://www.amazon.com
 - [x] User shall be able to add their own products.
 - [x] User shall be able to edit their own existing product postings.
 - [x] User shall be able to delete their own existing product listings.
+- [x] User shall see animation on certain user actions.
 
 ## App Walkthrough
 

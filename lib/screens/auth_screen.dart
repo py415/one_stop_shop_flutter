@@ -46,7 +46,7 @@ class AuthScreen extends StatelessWidget {
                       margin: EdgeInsets.only(bottom: 20.0),
                       padding: EdgeInsets.symmetric(
                         vertical: 8.0,
-                        horizontal: 94.0,
+                        horizontal: 44.0,
                       ),
                       transform: Matrix4.rotationZ(-8 * pi / 180)
                         ..translate(-10.0),
@@ -62,7 +62,7 @@ class AuthScreen extends StatelessWidget {
                         ],
                       ),
                       child: Text(
-                        'My Shop',
+                        'One Stop Shop',
                         style: TextStyle(
                           color:
                               Theme.of(context).accentTextTheme.headline6.color,
@@ -92,7 +92,8 @@ class AuthCard extends StatefulWidget {
   _AuthCardState createState() => _AuthCardState();
 }
 
-class _AuthCardState extends State<AuthCard> {
+class _AuthCardState extends State<AuthCard>
+    with SingleTickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey();
   // Either show login or registration screen.
   AuthMode _authMode = AuthMode.Login;
@@ -108,6 +109,53 @@ class _AuthCardState extends State<AuthCard> {
   // Regular expression for testing email validity.
   final _emailPattern =
       r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+";
+  // Controller for animation.
+  AnimationController _animationController;
+  // Animation for making an object look like its sliding.
+  Animation<Offset> _slideAnimation;
+  // Animation for making object look like its fading in or out.
+  Animation<double> _opacityAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Setup new animation controller for AuthCard.
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 300),
+    );
+
+    // Slide animation to make 'Confirm Password' look like it's sliding down from 'Password' text field above.
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(0, -1.5),
+      end: Offset(0, 0),
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.fastOutSlowIn,
+      ),
+    );
+
+    // Make 'Confirm Password' text field look like it is fading in.
+    _opacityAnimation = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeIn,
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    // Clear out controller in memory after animation is done to prevent memory leaks.
+    _animationController.dispose();
+  }
 
   // Show pop up when there is an error.
   void _showErrorDialog(String message) {
@@ -189,10 +237,14 @@ class _AuthCardState extends State<AuthCard> {
       setState(() {
         _authMode = AuthMode.SignUp;
       });
+
+      _animationController.forward();
     } else {
       setState(() {
         _authMode = AuthMode.Login;
       });
+
+      _animationController.reverse();
     }
   }
 
@@ -206,7 +258,9 @@ class _AuthCardState extends State<AuthCard> {
         borderRadius: BorderRadius.circular(10.0),
       ),
       elevation: 8.0,
-      child: Container(
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeIn,
         height: _authMode == AuthMode.SignUp ? 320 : 260,
         constraints: BoxConstraints(
           minHeight: _authMode == AuthMode.SignUp ? 320 : 260,
@@ -249,19 +303,34 @@ class _AuthCardState extends State<AuthCard> {
                   },
                 ),
                 if (_authMode == AuthMode.SignUp)
-                  TextFormField(
-                    enabled: _authMode == AuthMode.SignUp,
-                    decoration: InputDecoration(labelText: 'Confirm Password'),
-                    obscureText: true,
-                    validator: _authMode == AuthMode.SignUp
-                        ? (value) {
-                            if (value != _passwordController.text) {
-                              return 'Passwords do not match!';
-                            }
+                  AnimatedContainer(
+                    constraints: BoxConstraints(
+                      minHeight: _authMode == AuthMode.SignUp ? 60 : 0,
+                      maxHeight: _authMode == AuthMode.SignUp ? 120 : 0,
+                    ),
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeIn,
+                    child: FadeTransition(
+                      opacity: _opacityAnimation,
+                      child: SlideTransition(
+                        position: _slideAnimation,
+                        child: TextFormField(
+                          enabled: _authMode == AuthMode.SignUp,
+                          decoration:
+                              InputDecoration(labelText: 'Confirm Password'),
+                          obscureText: true,
+                          validator: _authMode == AuthMode.SignUp
+                              ? (value) {
+                                  if (value != _passwordController.text) {
+                                    return 'Passwords do not match!';
+                                  }
 
-                            return null;
-                          }
-                        : null,
+                                  return null;
+                                }
+                              : null,
+                        ),
+                      ),
+                    ),
                   ),
                 SizedBox(height: 20),
                 if (_isLoading)
