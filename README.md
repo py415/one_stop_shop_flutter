@@ -5,7 +5,8 @@
 2. [Product Specs](#Product-Specs)
 3. [App Walkthrough](#App-Walkthrough)
 4. [Libraries](#Libraries)
-5. [Credits](#Credits)
+5. [Backend](#Backend)
+6. [Credits](#Credits)
 
 ## Overview
 ### Description
@@ -50,6 +51,10 @@ Here's a GIF of how the app works:
 - [provider](https://github.com/rrousselGit/provider) - A wrapper around InheritedWidget to make them easier to use and more reusable.
 - [intl](https://github.com/dart-lang/intl) - A package that provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
 - [http](https://github.com/dart-lang/http) - A composable, Future-based library for making HTTP requests.
+
+## Backend
+
+- [Firebase](https://firebase.google.com/) - Is a Backend-as-a-Service (BaaS) framework that helps you quickly develop high-quality apps and grow your business.
 
 ## Credits
 
