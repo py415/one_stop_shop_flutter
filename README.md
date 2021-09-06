@@ -40,9 +40,9 @@ One Stop Shop is an e-commerce shopping app like [Amazon](https://www.amazon.com
 
 Here's a GIF of how the app works:
 
-<img src="https://github.com/py415/app-resources/blob/master/flutter/ios/flutter-ios-one-stop-shop.gif" width=250>
+<img src="https://raw.githubusercontent.com/py415/app-resources/master/flutter/ios/flutter-ios-one-stop-shop.gif" width="250" />
 
-<img src="https://github.com/py415/app-resources/blob/master/flutter/android/flutter-android-one-stop-shop.gif" width=250>
+<img src="https://raw.githubusercontent.com/py415/app-resources/master/flutter/android/flutter-android-one-stop-shop.gif" width="250" />
 
 ## Libraries
 
