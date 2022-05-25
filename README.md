@@ -1,19 +1,19 @@
-# One Stop Shop
+# 🛒 One Stop Shop
 
-## Table of Contents
-1. [Overview](#Overview)
-2. [Product Specs](#Product-Specs)
-3. [App Walkthrough](#App-Walkthrough)
-4. [Libraries](#Libraries)
-5. [Backend](#Backend)
-6. [Credits](#Credits)
+## 📋 Table of Contents
+1. [Overview](#-Overview)
+2. [Product Specs](#-Product-Specs)
+3. [App Walkthrough](#-App-Walkthrough)
+4. [Libraries](#-Libraries)
+5. [Backend](#-Backend)
+6. [Credits](#-Credits)
 
-## Overview
+## 👀 Overview
 ### Description
 
 One Stop Shop is an e-commerce shopping app like [Amazon](https://www.amazon.com/) or [eBay](https://www.ebay.com/) that sells a wide variety of products and services from both manufacturers and indepedent sellers.
 
-## Product Specs
+## 📕 Product Specs
 ### User Stories
 
 - [x] User shall be able register for a new account.
@@ -36,15 +36,15 @@ One Stop Shop is an e-commerce shopping app like [Amazon](https://www.amazon.com
 - [x] User shall be able to delete their own existing product listings.
 - [x] User shall see animation on certain user actions.
 
-## App Walkthrough
+## 🎬 App Walkthrough
 
 Here's a GIF of how the app works:
 
-<img src="https://raw.githubusercontent.com/py415/app-resources/master/flutter/ios/flutter-ios-one-stop-shop.gif" width="250" />
+<img src="https://raw.githubusercontent.com/py415/app-resources/master/GIFs/flutter/ios/flutter-ios-one-stop-shop.gif" width="250" />
 
-<img src="https://raw.githubusercontent.com/py415/app-resources/master/flutter/android/flutter-android-one-stop-shop.gif" width="250" />
+<img src="https://raw.githubusercontent.com/py415/app-resources/master/GIFs/flutter/android/flutter-android-one-stop-shop.gif" width="250" />
 
-## Libraries
+## 📚 Libraries
 
 - [cupertino_icons](https://github.com/flutter/cupertino_icons) - This is an asset repo containing the default set of icon assets used by Flutter's [Cupertino widgets](https://github.com/flutter/flutter/tree/master/packages/flutter/lib/src/cupertino).
 - [pedantic](https://github.com/dart-lang/pedantic) - Most of the recommended lints directly implement the guidelines set out in [Effective Dart](https://dart.dev/guides/language/effective-dart).
@@ -52,10 +52,10 @@ Here's a GIF of how the app works:
 - [intl](https://github.com/dart-lang/intl) - A package that provides internationalization and localization facilities, including message translation, plurals and genders, date/number formatting and parsing, and bidirectional text.
 - [http](https://github.com/dart-lang/http) - A composable, Future-based library for making HTTP requests.
 
-## Backend
+## ⏪ Backend
 
 - [Firebase](https://firebase.google.com/) - Is a Backend-as-a-Service (BaaS) framework that helps you quickly develop high-quality apps and grow your business.
 
-## Credits
+## 💳 Credits
 
 >This is a companion project to Flutter & Dart - The Complete Guide, check out the full course at [www.academind.com](https://academind.com/).
